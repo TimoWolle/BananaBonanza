@@ -8,7 +8,7 @@ public enum ProductStatus {
     BACKORDER("Backorder"),
     AVAILABLE_WITH_STOCK("Available. Stock: %d");
 
-    private String resourceKey;
+    private final String resourceKey;
 
     ProductStatus(String resourceKey) {
         this.resourceKey = resourceKey;

@@ -7,7 +7,7 @@ public enum DeliveryStatus {
     DAMAGED("Damaged"),
     ON_HOLD("On Hold");
 
-    private String resourceKey;
+    private final String resourceKey;
 
     DeliveryStatus(String resourceKey) {
         this.resourceKey = resourceKey;
