@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+
+  # BananaBonanza-Database
+  BananaBonanza-database:
+    image: postgres:latest
+    container_name: BananaBonanza-Database
+    ports:
+      - 5434:5432
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_USER: aws
+      POSTGRES_PASSWORD: aws
+      POSTGRES_DB: BananaBonanza
+    restart: always
