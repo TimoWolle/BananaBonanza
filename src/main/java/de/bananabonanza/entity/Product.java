@@ -25,7 +25,7 @@ public class Product {
     private String description;
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Review> reviews = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private ProductStatus status;

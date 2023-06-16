@@ -1,6 +1,5 @@
 package de.bananabonanza.entity;
 
-import de.bananabonanza.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +25,6 @@ public class Wishlist {
     @ElementCollection
     private Map<Product, Integer> items = new HashMap<>() {};
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<User> sharedUsers = new ArrayList<>();
 }

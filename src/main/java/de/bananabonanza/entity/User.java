@@ -24,15 +24,15 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String passwort;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Address> addresses = new ArrayList<>();
     @ElementCollection
     private Map<Product, Integer> shoppingCart = new HashMap<>();
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Wishlist> wishlist = new ArrayList<>();
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Product> saveforlaterlist = new ArrayList<>();
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Payment> payments = new ArrayList<>();
 
     @Override

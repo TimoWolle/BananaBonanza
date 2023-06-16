@@ -1,4 +1,4 @@
-package de.bananabonanza.entity;
+package de.bananabonanza.enumeration;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
