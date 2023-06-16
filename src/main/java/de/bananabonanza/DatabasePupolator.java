@@ -10,10 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -30,8 +27,8 @@ public class DatabasePupolator implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Erstelle Adressen
-        Address address = new Address(null,"Germany", "PostalCode", "City", "Street", "HouseNumber");
-        Address address2 = new Address(null,"Sweden", "PostalCode", "City", "Street", "HouseNumber");
+        Address address = new Address(null,"Germany", "PostalCode", "City", "Street", "HouseNumber", true);
+        Address address2 = new Address(null,"Sweden", "PostalCode", "City", "Street", "HouseNumber", false);
 
         addressRepository.save(address);
         addressRepository.save(address);
