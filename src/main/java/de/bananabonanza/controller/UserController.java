@@ -7,6 +7,7 @@ import de.bananabonanza.dto.update.UserUpdate;
 import de.bananabonanza.entity.Address;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.service.AddressService;
+import de.bananabonanza.service.OrderService;
 import de.bananabonanza.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final AddressService addressService;
+    private final OrderService orderService;
     private final ModelMapper mapper;
 
     public ResponseEntity<List<User>> getAllUsers() {
