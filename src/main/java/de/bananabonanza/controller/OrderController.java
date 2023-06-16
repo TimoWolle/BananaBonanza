@@ -1,7 +1,6 @@
 package de.bananabonanza.controller;
 
 import de.bananabonanza.dto.create.OrderCreate;
-import de.bananabonanza.dto.update.OrderUpdate;
 import de.bananabonanza.entity.Order;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.service.OrderService;
@@ -13,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,40 +29,31 @@ public class OrderController {
         return Order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Order>  createOrder(@RequestBody OrderCreate orderCreate) {
-        Order newOrder = orderService.createOrder(mapper.map(orderCreate, Order.class));
-        return ResponseEntity.ok(newOrder);
+    @GetMapping("/{id}")
+    public List<Order> getOrderByUserId(@AuthenticationPrincipal User _user) {
+        return orderService.getAllOrdersByUser(_user);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody OrderUpdate orderUpdate) {
-        Optional<Order> order = orderService.updateOrder(mapper.map(orderUpdate, Order.class), id);
-        return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        if (orderService.getOrderById(id).isPresent()) {
-            orderService.deleteOrder(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/cart/submit")
+    @PostMapping("/shopping-cart/submit")
     public ResponseEntity<Order> submitOrder(@AuthenticationPrincipal User _user){
         Optional<User> optionalUser = userService.getUserById(_user.getId());
 
-        User user = optionalUser.get();
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            OrderCreate orderCreate = new OrderCreate();
 
-        OrderCreate orderCreate = new OrderCreate();
+            orderCreate.setUser(user);
+            orderCreate.setItems(user.getShoppingCart());
+            orderCreate.setPaid(false);
 
-        orderCreate.setUser(user);
-        orderCreate.setItems(user.getShoppingCart());
-        orderCreate.setPaid(false);
+            return createOrder(orderCreate);
+        }
 
-        return createOrder(orderCreate);
+        return ResponseEntity.notFound().build();
+    }
+
+    private ResponseEntity<Order>  createOrder(@RequestBody OrderCreate orderCreate) {
+        Order newOrder = orderService.createOrder(mapper.map(orderCreate, Order.class));
+        return ResponseEntity.ok(newOrder);
     }
 }

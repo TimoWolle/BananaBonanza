@@ -10,6 +10,8 @@ import de.bananabonanza.dto.update.WarehouseUpdate;
 import de.bananabonanza.entity.Product;
 import de.bananabonanza.entity.Review;
 import de.bananabonanza.entity.Warehouse;
+import de.bananabonanza.enumeration.ProductCategory;
+import de.bananabonanza.enumeration.ProductStatus;
 import de.bananabonanza.service.ProductService;
 import de.bananabonanza.service.ReviewService;
 import de.bananabonanza.service.WarehouseService;
@@ -53,7 +55,6 @@ public class WarehouseController {
         Optional<Warehouse> warehouse = warehouseService.updateWarehouse(mapper.map(updatedWarehouse, Warehouse.class), id);
         return warehouse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     @PutMapping("/Wishlist-Item-Update")
     public ResponseEntity<?> updateWarehouseItem(@Valid @RequestBody WarehouseItemUpdateRequest request) {
@@ -102,6 +103,16 @@ public class WarehouseController {
         return productOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/category/{category}")
+    public List<Product> getProductsByCategory(@Valid @PathVariable("category") ProductCategory category) {
+        return productService.getProductsByCategory(category);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Product> getProductsByAvailability(@Valid @PathVariable("status") ProductStatus status) {
+        return productService.getProductsByStatus(status);
+    }
+
     @PostMapping("/products")
     public Product createProduct(@RequestBody ProductCreate productCreate) {
         return productService.createProduct(mapper.map(productCreate, Product.class));
@@ -121,11 +132,6 @@ public class WarehouseController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @GetMapping("/product/review")
-    public List<Review> getAllReviews() {
-        return reviewService.getAllReviews();
     }
 
     @GetMapping("/product/review/{id}")

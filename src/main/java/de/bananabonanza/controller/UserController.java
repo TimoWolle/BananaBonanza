@@ -1,5 +1,6 @@
 package de.bananabonanza.controller;
 
+import de.bananabonanza.dto.UserShoppingCartItem;
 import de.bananabonanza.dto.create.AddressCreate;
 import de.bananabonanza.dto.create.UserCreate;
 import de.bananabonanza.dto.update.AddressUpdate;
@@ -9,9 +10,11 @@ import de.bananabonanza.entity.User;
 import de.bananabonanza.service.AddressService;
 import de.bananabonanza.service.OrderService;
 import de.bananabonanza.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,18 +68,6 @@ public class UserController {
 
     }
 
-    @GetMapping("/{id}/address")
-    public ResponseEntity<List<Address>> getAddressByUser(@PathVariable Long id) {
-        Optional<User> optionalUser = userService.getUserById(id);
-
-        if (optionalUser.isPresent()) {
-            List<Address> addresses = optionalUser.get().getAddresses();
-            return ResponseEntity.ok(addresses);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/address/{id}")
     public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
         Optional<Address> optionalAddress = addressService.getAddressById(id);
@@ -104,4 +95,30 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/shopping-cart/update")
+    public ResponseEntity<?> updateShoppingCart(@AuthenticationPrincipal User _user, @Valid @RequestBody UserShoppingCartItem request) {
+        Optional<User> optionalUser = userService.getUserById(_user.getId());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            switch (request.getAction()) {
+                case "add": user.getShoppingCart().put(request.getProduct(), request.getQuantity());
+                case "remove": user.getShoppingCart().remove(request.getProduct());
+                case "update":
+                    if (user.getShoppingCart().containsKey(request.getProduct())) {
+                        user.getShoppingCart().put(request.getProduct(), request.getQuantity());
+                    } else {
+                        return ResponseEntity.badRequest().body("Product not found in shopping cart");
+                    }
+                    break;
+                default:
+                    return ResponseEntity.badRequest().body("Invalid action");
+            }
+            optionalUser = userService.updateUser(user, _user.getId());
+            return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

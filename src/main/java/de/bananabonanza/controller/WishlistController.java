@@ -1,9 +1,8 @@
 package de.bananabonanza.controller;
 
-import de.bananabonanza.dto.create.WishlistCreate;
 import de.bananabonanza.dto.WishlistItemUpdateRequest;
-import de.bananabonanza.dto.update.WishlistUpdate;
 import de.bananabonanza.dto.WishlistUserUpdateRequest;
+import de.bananabonanza.dto.create.WishlistCreate;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.entity.Wishlist;
 import de.bananabonanza.service.UserService;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,11 +23,6 @@ public class WishlistController {
     private final WishlistService wishlistService;
     private final UserService userService;
     private final ModelMapper mapper;
-
-    @GetMapping
-    public List<Wishlist> getAllWishlists() {
-        return wishlistService.getAllWishlists();
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Wishlist> getWishlistById(@PathVariable Long id) {
@@ -43,12 +36,6 @@ public class WishlistController {
         return wishlistService.createWishlist(mapper.map(wishlistCreate, Wishlist.class));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Wishlist> updateWishlist(@RequestBody WishlistUpdate updatedWishlist, @PathVariable Long id) {
-        Optional<Wishlist> wishlist = wishlistService.updateWishlist(mapper.map(updatedWishlist, Wishlist.class), id);
-        return wishlist.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWishlist(@PathVariable Long id) {
         if (wishlistService.getWishlistById(id).isPresent()) {
@@ -58,7 +45,6 @@ public class WishlistController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @PutMapping("/Wishlist-Item-Update")
     public ResponseEntity<?> updateWishlistItem(@Valid @RequestBody WishlistItemUpdateRequest request) {

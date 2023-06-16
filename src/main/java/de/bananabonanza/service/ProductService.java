@@ -1,6 +1,8 @@
 package de.bananabonanza.service;
 
 import de.bananabonanza.entity.Product;
+import de.bananabonanza.enumeration.ProductCategory;
+import de.bananabonanza.enumeration.ProductStatus;
 import de.bananabonanza.respository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -43,4 +45,13 @@ public class ProductService {
     public void deleteProduct(long id){
         productRepository.deleteById(id);
     }
+
+    public List<Product> getProductsByCategory(ProductCategory category) {
+        return productRepository.findByCategory(category);
+    }
+
+    public List<Product> getProductsByStatus(ProductStatus status) {
+        return productRepository.findByStatus(status);
+    }
+
 }

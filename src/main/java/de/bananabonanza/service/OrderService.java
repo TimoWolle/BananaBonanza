@@ -1,6 +1,7 @@
 package de.bananabonanza.service;
 
 import de.bananabonanza.entity.Order;
+import de.bananabonanza.entity.User;
 import de.bananabonanza.respository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class OrderService {
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
+    }
+
+    public List<Order> getAllOrdersByUser(User user){
+        return orderRepository.findByUser(user);
     }
 
     public Optional<Order> getOrderById(Long id) {
