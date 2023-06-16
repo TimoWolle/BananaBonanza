@@ -68,7 +68,7 @@ public class DatabasePupolator implements CommandLineRunner {
         review = reviewRepository.save(review);
 
         // Füge die Review zum Produkt hinzu
-        product.getReviews().add(review);
+        product.setReviews(Collections.singletonList(review));
         product = productRepository.save(product);
 
         // Erstelle Order

@@ -19,7 +19,7 @@ public class Review {
     private long id;
     private String title;
     private String description;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private User author;
     @Enumerated(EnumType.STRING)
     private Rating rating;

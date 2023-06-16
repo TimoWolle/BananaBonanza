@@ -8,7 +8,6 @@ import de.bananabonanza.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('TODO_FULLRIGHTS')")
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
@@ -29,7 +27,7 @@ public class OrderController {
         return Order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public List<Order> getOrderByUserId(@AuthenticationPrincipal User _user) {
         return orderService.getAllOrdersByUser(_user);
     }
