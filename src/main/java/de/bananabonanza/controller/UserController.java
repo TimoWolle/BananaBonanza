@@ -4,11 +4,11 @@ import de.bananabonanza.dto.UserShoppingCartItem;
 import de.bananabonanza.dto.create.AddressCreate;
 import de.bananabonanza.dto.create.UserCreate;
 import de.bananabonanza.dto.update.AddressUpdate;
+import de.bananabonanza.dto.update.SaveForLaterListItem;
 import de.bananabonanza.dto.update.UserUpdate;
 import de.bananabonanza.entity.Address;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.service.AddressService;
-import de.bananabonanza.service.OrderService;
 import de.bananabonanza.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final AddressService addressService;
-    private final OrderService orderService;
     private final ModelMapper mapper;
 
     public ResponseEntity<List<User>> getAllUsers() {
@@ -102,17 +101,17 @@ public class UserController {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             switch (request.getAction()) {
-                case "add": user.getShoppingCart().put(request.getProduct(), request.getQuantity());
-                case "remove": user.getShoppingCart().remove(request.getProduct());
-                case "update":
+                case "add" -> { user.getShoppingCart().put(request.getProduct(), request.getQuantity());}
+                case "remove" -> { user.getShoppingCart().remove(request.getProduct());}
+                case "update"-> {
                     if (user.getShoppingCart().containsKey(request.getProduct())) {
                         user.getShoppingCart().put(request.getProduct(), request.getQuantity());
                     } else {
                         return ResponseEntity.badRequest().body("Product not found in shopping cart");
-                    }
-                    break;
-                default:
+                    }}
+                default -> {
                     return ResponseEntity.badRequest().body("Invalid action");
+                }
             }
             optionalUser = userService.updateUser(user, _user.getId());
             return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -121,4 +120,28 @@ public class UserController {
         }
     }
 
+    @PutMapping("/save-for-later-list/update")
+    public ResponseEntity<?> updateSaveForLaterList(@AuthenticationPrincipal User _user, @Valid @RequestBody SaveForLaterListItem request) {
+        Optional<User> optionalUser = userService.getUserById(_user.getId());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            switch (request.getAction()) {
+                case "add" -> {
+                    if (!user.getSaveforlaterlist().contains(request.getProduct())) {
+                        user.getSaveforlaterlist().add(request.getProduct());
+                    } else {
+                        return ResponseEntity.badRequest().body("Product already exists in the list");
+                    }
+                }
+                case "remove" -> user.getSaveforlaterlist().remove(request.getProduct());
+                default -> {
+                    return ResponseEntity.badRequest().body("Invalid action");
+                }
+            }
+            optionalUser = userService.updateUser(user, _user.getId());
+            return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
