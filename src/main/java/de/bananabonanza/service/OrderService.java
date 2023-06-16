@@ -1,7 +1,6 @@
 package de.bananabonanza.service;
 
 import de.bananabonanza.entity.Order;
-import de.bananabonanza.enumeration.DeliveryStatus;
 import de.bananabonanza.respository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +23,11 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-
     public Order createOrder(Order order) {
         order.setBuydate(LocalDateTime.now());
         order.setLastedit(LocalDateTime.now());
         return orderRepository.save(order);
     }
-
 
     public Optional<Order> updateOrder(Order updatedOrder, Long id) {
         return orderRepository.findById(id)
@@ -48,45 +45,5 @@ public class OrderService {
 
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
-    }
-
-    public List<Order> getOrdersInTransit(){
-        return orderRepository.findByDeliveryStatus(DeliveryStatus.IN_TRANSIT);
-    }
-
-    public List<Order> getDeliveredOrders(){
-        return orderRepository.findByDeliveryStatus(DeliveryStatus.DELIVERED);
-    }
-
-    public List<Order> getReturnedOrders(){
-        return orderRepository.findByDeliveryStatus(DeliveryStatus.RETURNED);
-    }
-
-    public List<Order> getDamagedOrders(){
-        return orderRepository.findByDeliveryStatus(DeliveryStatus.DAMAGED);
-    }
-
-    public List<Order> getOnHoldOrders(){
-        return orderRepository.findByDeliveryStatus(DeliveryStatus.ON_HOLD);
-    }
-
-    public long getCountOrdersInTransit(){
-        return orderRepository.countByDeliveryStatus(DeliveryStatus.IN_TRANSIT);
-    }
-
-    public long getCountDeliveredOrders(){
-        return orderRepository.countByDeliveryStatus(DeliveryStatus.DELIVERED);
-    }
-
-    public long getCountReturnedOrders(){
-        return orderRepository.countByDeliveryStatus(DeliveryStatus.RETURNED);
-    }
-
-    public long getCountDamagedOrders(){
-        return orderRepository.countByDeliveryStatus(DeliveryStatus.DAMAGED);
-    }
-
-    public long getCountOnHoldOrders(){
-        return orderRepository.countByDeliveryStatus(DeliveryStatus.ON_HOLD);
     }
 }

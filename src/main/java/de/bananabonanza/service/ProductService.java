@@ -1,7 +1,6 @@
 package de.bananabonanza.service;
 
 import de.bananabonanza.entity.Product;
-import de.bananabonanza.enumeration.ProductStatus;
 import de.bananabonanza.respository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -43,45 +42,5 @@ public class ProductService {
 
     public void deleteProduct(long id){
         productRepository.deleteById(id);
-    }
-
-    public List<Product> getAvailableProducts(){
-        return productRepository.findByStatus(ProductStatus.AVAILABLE);
-    }
-
-    public List<Product> getOutOfStockProducts(){
-        return productRepository.findByStatus(ProductStatus.OUT_OF_STOCK);
-    }
-
-    public List<Product> getDiscontinuedProducts(){
-        return productRepository.findByStatus(ProductStatus.DISCONTINUED);
-    }
-
-    public List<Product> getPreorderProducts(){
-        return productRepository.findByStatus(ProductStatus.PREORDER);
-    }
-
-    public List<Product> getBackorderProducts(){
-        return productRepository.findByStatus(ProductStatus.BACKORDER);
-    }
-
-    public long getCountAvailableProducts(){
-        return productRepository.countByStatus(ProductStatus.AVAILABLE);
-    }
-
-    public long getCountOutOfStockProducts(){
-        return productRepository.countByStatus(ProductStatus.OUT_OF_STOCK);
-    }
-
-    public long getCountDiscontinuedProducts(){
-        return productRepository.countByStatus(ProductStatus.DISCONTINUED);
-    }
-
-    public long getCountPreorderProducts(){
-        return productRepository.countByStatus(ProductStatus.PREORDER);
-    }
-
-    public long getCountBackorderProducts(){
-        return productRepository.countByStatus(ProductStatus.BACKORDER);
     }
 }

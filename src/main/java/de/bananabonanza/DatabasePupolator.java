@@ -31,7 +31,7 @@ public class DatabasePupolator implements CommandLineRunner {
         Address address2 = new Address(null,"Sweden", "PostalCode", "City", "Street", "HouseNumber", false);
 
         addressRepository.save(address);
-        addressRepository.save(address);
+        addressRepository.save(address2);
 
         // Erstelle einige Produkte
         Product product = new Product(null, "Schlafanzug", "Description1", ProductCategory.GADGETS, Collections.emptyList(), ProductStatus.AVAILABLE);
