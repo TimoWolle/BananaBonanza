@@ -5,7 +5,6 @@ import de.bananabonanza.enumeration.ProductCategory;
 import de.bananabonanza.enumeration.ProductStatus;
 import de.bananabonanza.respository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<Product> getAllProducts(){
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return productRepository.findAll();
     }
 
     public Optional<Product> getProductById(long id){
@@ -32,7 +31,7 @@ public class ProductService {
 
         return productRepository.findById(id)
                 .map(product -> {
-                    product.setTitel(updatedProduct.getTitel());
+                    product.setTitle(updatedProduct.getTitle());
                     product.setDescription(updatedProduct.getDescription());
                     product.setCategory(updatedProduct.getCategory());
                     product.setReviews(updatedProduct.getReviews());

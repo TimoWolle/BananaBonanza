@@ -1,5 +1,6 @@
 package de.bananabonanza.service;
 
+import de.bananabonanza.entity.ProductCount;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class UserService {
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public List<ProductCount> getShoppingCartByUserId(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.get().getShoppingCartList();
     }
 
     public User saveUser(User user) {

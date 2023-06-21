@@ -1,5 +1,8 @@
 package de.bananabonanza.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +23,11 @@ import java.util.*;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Basic.class)
     private Long id;
+    @JsonView(Views.Basic.class)
     private String firstname;
+    @JsonView(Views.Basic.class)
     private String lastname;
     private String email;
     private String passwort;
@@ -34,6 +41,11 @@ public class User implements UserDetails {
     private List<Product> saveforlaterlist = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Payment> payments = new ArrayList<>();
+
+    public User(String email, String encryptedPassword) {
+        this.email = email;
+        this.passwort = encryptedPassword;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,5 +80,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @JsonIgnore
+    public Map<Product, Integer> getShoppingCart() {
+        return shoppingCart;
+    }
+
+    @JsonProperty("shoppingCart")
+    public List<ProductCount> getShoppingCartList() {
+        return shoppingCart.entrySet().stream()
+                .map(entry -> new ProductCount(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }

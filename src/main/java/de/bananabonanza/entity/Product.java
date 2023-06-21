@@ -21,8 +21,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String titel;
+    private String title;
     private String description;
+    private String imageURL;
+    private double price;
+    private double oldPrice;
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -31,3 +34,4 @@ public class Product {
     private ProductStatus status;
 
 }
+

@@ -1,5 +1,6 @@
 package de.bananabonanza.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import de.bananabonanza.dto.WarehouseItemUpdateRequest;
 import de.bananabonanza.dto.create.ProductCreate;
 import de.bananabonanza.dto.create.ReviewCreate;
@@ -9,6 +10,7 @@ import de.bananabonanza.dto.update.ReviewUpdate;
 import de.bananabonanza.dto.update.WarehouseUpdate;
 import de.bananabonanza.entity.Product;
 import de.bananabonanza.entity.Review;
+import de.bananabonanza.entity.Views;
 import de.bananabonanza.entity.Warehouse;
 import de.bananabonanza.enumeration.ProductCategory;
 import de.bananabonanza.enumeration.ProductStatus;
@@ -91,8 +93,8 @@ public class WarehouseController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @GetMapping("/products")
+    @JsonView(Views.Basic.class)
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }

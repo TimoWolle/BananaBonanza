@@ -7,6 +7,7 @@ import de.bananabonanza.dto.update.AddressUpdate;
 import de.bananabonanza.dto.update.SaveForLaterListItem;
 import de.bananabonanza.dto.update.UserUpdate;
 import de.bananabonanza.entity.Address;
+import de.bananabonanza.entity.ProductCount;
 import de.bananabonanza.entity.User;
 import de.bananabonanza.service.AddressService;
 import de.bananabonanza.service.UserService;
@@ -38,6 +39,11 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/cart")
+    public List <ProductCount> getShoppingCartByUserId(@PathVariable Long id) {
+        return userService.getShoppingCartByUserId(id);
+    }
+
     @PostMapping
     public ResponseEntity<User>  createUser(@RequestBody UserCreate userCreate) {
         User newUser = userService.createUser(mapper.map(userCreate, User.class));
@@ -60,7 +66,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<User> checkUserByEmail(@PathVariable("email") String email){
         Optional<User> userOptional = userService.getUserByEmail(email);
         return userOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -100,6 +106,11 @@ public class UserController {
         Optional<User> optionalUser = userService.getUserById(_user.getId());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+
+            if (request.getQuantity() == 0){
+                request.setAction("remove");
+            }
+
             switch (request.getAction()) {
                 case "add" -> { user.getShoppingCart().put(request.getProduct(), request.getQuantity());}
                 case "remove" -> { user.getShoppingCart().remove(request.getProduct());}
