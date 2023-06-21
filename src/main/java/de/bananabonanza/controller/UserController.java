@@ -14,6 +14,7 @@ import de.bananabonanza.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -115,6 +116,11 @@ public class UserController {
                 case "add" -> { user.getShoppingCart().put(request.getProduct(), request.getQuantity());}
                 case "remove" -> { user.getShoppingCart().remove(request.getProduct());}
                 case "update"-> {
+
+                    if (user.getShoppingCart().containsKey(request.getProduct())){
+                        System.out.print("true");
+                    }
+
                     if (user.getShoppingCart().containsKey(request.getProduct())) {
                         user.getShoppingCart().put(request.getProduct(), request.getQuantity());
                     } else {
@@ -125,7 +131,12 @@ public class UserController {
                 }
             }
             optionalUser = userService.updateUser(user, _user.getId());
-            return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
+            if (optionalUser.isPresent()) {
+                return new ResponseEntity<>(optionalUser.get().getShoppingCartList(), HttpStatus.OK);
+            }else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -19,7 +19,7 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(String username, String password) throws AuthenticationException {
+    public Boolean login(String username, String password) throws AuthenticationException {
         // Benutzer anhand des Benutzernamens aus der Datenbank abrufen
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new AuthExeption("Invalid username or password"));
@@ -31,9 +31,9 @@ public class AuthenticationService {
 
         // Angemeldeten Benutzer setzen
         loggedInUserId = user.getId().toString();
-
+        return true;
         // Token generieren und zurückgeben
-        return generateToken(user);
+        //return generateToken(user);
     }
 
     public void register(RegisterRequest registerRequest) throws AuthenticationException {

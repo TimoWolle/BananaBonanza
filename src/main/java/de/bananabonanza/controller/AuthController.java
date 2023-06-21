@@ -24,8 +24,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             // Benutzeranmelde-Logik
-            String token = authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword());
-            return ResponseEntity.ok(new LoginResponse(token, "Login successful"));
+            return ResponseEntity.ok(new LoginResponse(authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword()), "Login successful"));
         } catch (AuthExeption e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

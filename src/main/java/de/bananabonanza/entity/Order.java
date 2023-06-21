@@ -2,12 +2,8 @@ package de.bananabonanza.entity;
 
 import de.bananabonanza.enumeration.DeliveryStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 
+@EqualsAndHashCode
 @Entity
 public class Order {
     @Id

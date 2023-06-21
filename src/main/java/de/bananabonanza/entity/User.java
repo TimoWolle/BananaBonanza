@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,6 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 
 @Entity
 public class User implements UserDetails {
@@ -33,7 +31,7 @@ public class User implements UserDetails {
     private String passwort;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Address> addresses = new ArrayList<>();
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Product, Integer> shoppingCart = new HashMap<>();
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Wishlist> wishlist = new ArrayList<>();

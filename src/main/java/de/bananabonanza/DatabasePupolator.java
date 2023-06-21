@@ -7,10 +7,13 @@ import de.bananabonanza.enumeration.Rating;
 import de.bananabonanza.respository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class DatabasePupolator implements CommandLineRunner {
     private final AddressRepository addressRepository;
     private final ReviewRepository reviewRepository;
     private final WishlistRepository wishlistRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -172,10 +176,12 @@ public class DatabasePupolator implements CommandLineRunner {
         wishlist=wishlistRepository.save(wishlist);
 
 
-//        ShoppingCart shoppingCart = new ShoppingCart();
-//        shoppingCart.setQuantity(43);
-//        shoppingCart.setProduct(product);
-//        shoppingCart=shoppingCartRepository.save(shoppingCart);
+        Map<Product, Integer> shoppingCart = new HashMap<>();
+
+       shoppingCart.put(product, 7);
+       shoppingCart.put(product4, 7);
+       shoppingCart.put(product5, 2);
+       shoppingCart.put(product2, 3);
 
         // Erstelle User
         User user = new User();
@@ -184,9 +190,10 @@ public class DatabasePupolator implements CommandLineRunner {
         user.setEmail("test@example.com");
         user.setPasswort("password");
         user.setAddresses(Collections.singletonList(address));
-        user.setShoppingCart(Collections.singletonMap(product,2));
+        user.setShoppingCart(shoppingCart);
         user.setWishlist(Collections.singletonList(wishlist));
         user.setSaveforlaterlist(Collections.singletonList(product));
+        user.setPasswort(passwordEncoder.encode(user.getPasswort()));
         userRepository.save(user);
 
         // Erstelle eine Review

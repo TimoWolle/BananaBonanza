@@ -1,10 +1,7 @@
 package de.bananabonanza.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
@@ -12,6 +9,7 @@ import java.util.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 
 @Entity
 public class Warehouse {
