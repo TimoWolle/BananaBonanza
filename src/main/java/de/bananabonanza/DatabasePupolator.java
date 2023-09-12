@@ -156,6 +156,14 @@ public class DatabasePupolator implements CommandLineRunner {
         product12.setCategory(ProductCategory.ACCESSORIES);
         product12.setStatus(ProductStatus.AVAILABLE);
 
+        Product pruduct13 = new Product();
+        pruduct13.setTitle("Bananen Kissen");
+        pruduct13.setDescription("Weiches, gemütliches Kissen in Bananenform.");
+        pruduct13.setImageURL("bananen_kissen.jpg");
+        pruduct13.setPrice(14.99);
+        pruduct13.setOldPrice(19.99);
+
+
         product = productRepository.save(product);
         product2 = productRepository.save(product2);
         product3 = productRepository.save(product3);
