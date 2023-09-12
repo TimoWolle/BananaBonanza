@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Webshop-Backend-Springboot {
+public class bananabonanza {
 
     public static void main(String[] args) {
-        SpringApplication.run(Webshop-Backend-Springboot.class, args);
+        SpringApplication.run(bananabonanza.class, args);
     }
 
 }
